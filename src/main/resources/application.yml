@@ -1,8 +1,11 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/legalconsultation
+    url: jdbc:mysql://localhost:3306/legalconsultation?serverTimezone=Europe/Bucharest
     username: root
     password: root
   jpa:
     hibernate.ddl-auto: update
     generate-ddl: true
+app:
+  jwtSecret: ORy9HWgKoZPAs50ECKw0
+  jwtExpirationInMs: 172800000   # two days expiration time, can be extended
