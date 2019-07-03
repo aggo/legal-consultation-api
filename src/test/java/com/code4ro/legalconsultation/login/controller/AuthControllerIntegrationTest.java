@@ -1,9 +1,11 @@
 package com.code4ro.legalconsultation.login.controller;
 
 
+import com.code4ro.legalconsultation.login.model.User;
 import com.code4ro.legalconsultation.login.payload.LoginRequest;
 import com.code4ro.legalconsultation.login.payload.SignUpRequest;
 import com.code4ro.legalconsultation.login.repository.UserRepository;
+import com.code4ro.legalconsultation.util.RandomObjectFiller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,8 +25,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 public class AuthControllerIntegrationTest {
-    private static final String USER_NAME = "userName";
-    private static final String PASSWORD = "validPassword";
 
     @Autowired
     private MockMvc mvc;
@@ -37,7 +37,7 @@ public class AuthControllerIntegrationTest {
 
     @Test
     public void signUp() throws Exception {
-        final SignUpRequest signUpRequest = getSignUpRequest();
+        final SignUpRequest signUpRequest = RandomObjectFiller.createAndFill(SignUpRequest.class);
         String json = objectMapper.writeValueAsString(signUpRequest);
 
         // register successfuly
@@ -46,7 +46,7 @@ public class AuthControllerIntegrationTest {
                 .content(json)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
-        assertThat(userRepository.existsByUsername(USER_NAME)).isNotNull();
+        assertThat(userRepository.existsByUsername(signUpRequest.getUsername())).isNotNull();
 
         // fail to register with same username
         mvc.perform(post("/api/auth/signup")
@@ -67,26 +67,36 @@ public class AuthControllerIntegrationTest {
                 .andExpect(status().isConflict());
     }
 
-    private SignUpRequest getSignUpRequest() {
-        final SignUpRequest signUpRequest = new SignUpRequest();
-        signUpRequest.setName(USER_NAME);
-        signUpRequest.setUsername(USER_NAME);
-        signUpRequest.setEmail("email@email.com");
-        signUpRequest.setPassword(PASSWORD);
-        return signUpRequest;
-    }
-
     @Test
     public void login() throws Exception {
-        final LoginRequest loginRequest = new LoginRequest();
-        loginRequest.setUsernameOrEmail(USER_NAME);
-        loginRequest.setPassword(PASSWORD);
-        final String json = objectMapper.writeValueAsString(loginRequest);
+        // register user
+        final SignUpRequest signUpRequest = RandomObjectFiller.createAndFill(SignUpRequest.class);
+        String json = objectMapper.writeValueAsString(signUpRequest);
+        mvc.perform(post("/api/auth/signup")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated());
 
+        final LoginRequest loginRequest = new LoginRequest();
+        loginRequest.setUsernameOrEmail(signUpRequest.getUsername());
+        loginRequest.setPassword(signUpRequest.getPassword());
+        json = objectMapper.writeValueAsString(loginRequest);
+
+        // login successfully with existing user
         mvc.perform(post("/api/auth/signin")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json)
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+
+        // fail to login
+        loginRequest.setUsernameOrEmail("differentUsername");
+        json = objectMapper.writeValueAsString(loginRequest);
+        mvc.perform(post("/api/auth/signin")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnauthorized());
     }
 }
