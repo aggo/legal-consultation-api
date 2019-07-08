@@ -1,11 +1,10 @@
 package com.code4ro.legalconsultation.login.service;
 
 import com.code4ro.legalconsultation.login.exception.ValidationException;
-import com.code4ro.legalconsultation.login.model.User;
+import com.code4ro.legalconsultation.login.model.ApplicationUser;
 import com.code4ro.legalconsultation.login.payload.SignUpRequest;
 import com.code4ro.legalconsultation.login.repository.UserRepository;
 import com.code4ro.legalconsultation.util.RandomObjectFiller;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -18,7 +17,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class UserServiceTest {
+public class ApplicationUserServiceTest {
     @Mock
     private UserRepository userRepository;
     @Mock
@@ -33,7 +32,7 @@ public class UserServiceTest {
         userService.save(signUpRequest);
 
         verify(passwordEncoder).encode(signUpRequest.getPassword());
-        verify(userRepository).save(any(User.class));
+        verify(userRepository).save(any(ApplicationUser.class));
     }
 
     @Test(expected = ValidationException.class)

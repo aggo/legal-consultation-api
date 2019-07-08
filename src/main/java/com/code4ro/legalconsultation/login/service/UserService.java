@@ -1,7 +1,7 @@
 package com.code4ro.legalconsultation.login.service;
 
 import com.code4ro.legalconsultation.login.exception.ValidationException;
-import com.code4ro.legalconsultation.login.model.User;
+import com.code4ro.legalconsultation.login.model.ApplicationUser;
 import com.code4ro.legalconsultation.login.payload.SignUpRequest;
 import com.code4ro.legalconsultation.login.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,17 +20,17 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public User save(SignUpRequest signUpRequest) throws ValidationException {
+    public ApplicationUser save(SignUpRequest signUpRequest) throws ValidationException {
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
             throw new ValidationException("Duplicate username!");
         }
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
             throw new ValidationException("Duplicate email!");
         }
-        User user = new User(signUpRequest.getName(), signUpRequest.getUsername(),
+        ApplicationUser applicationUser = new ApplicationUser(signUpRequest.getName(), signUpRequest.getUsername(),
                 signUpRequest.getEmail(), signUpRequest.getPassword());
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+        applicationUser.setPassword(passwordEncoder.encode(applicationUser.getPassword()));
+        return userRepository.save(applicationUser);
     }
 
 }

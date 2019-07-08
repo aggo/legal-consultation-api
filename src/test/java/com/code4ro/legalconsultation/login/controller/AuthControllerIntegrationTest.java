@@ -1,7 +1,6 @@
 package com.code4ro.legalconsultation.login.controller;
 
 
-import com.code4ro.legalconsultation.login.model.User;
 import com.code4ro.legalconsultation.login.payload.LoginRequest;
 import com.code4ro.legalconsultation.login.payload.SignUpRequest;
 import com.code4ro.legalconsultation.login.repository.UserRepository;
