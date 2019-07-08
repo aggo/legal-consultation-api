@@ -1,6 +1,6 @@
 package com.code4ro.legalconsultation.login.repository;
 
-import com.code4ro.legalconsultation.login.model.User;
+import com.code4ro.legalconsultation.login.model.ApplicationUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -8,9 +8,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, UUID> {
+public interface UserRepository extends JpaRepository<ApplicationUser, UUID> {
 
-    Optional<User> findByUsernameOrEmail(String username, String email);
+    Optional<ApplicationUser> findByUsernameOrEmail(String username, String email);
 
     Boolean existsByUsername(String username);
 

@@ -1,6 +1,6 @@
 package com.code4ro.legalconsultation.login.controller;
 
-import com.code4ro.legalconsultation.login.model.User;
+import com.code4ro.legalconsultation.login.model.ApplicationUser;
 import com.code4ro.legalconsultation.login.payload.ApiResponse;
 import com.code4ro.legalconsultation.login.payload.JwtAuthenticationResponse;
 import com.code4ro.legalconsultation.login.payload.LoginRequest;
@@ -58,12 +58,12 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<ApiResponse> registerUser(@Valid @RequestBody SignUpRequest signUpRequest)
             throws RuntimeException {
-        final User result = userService.save(signUpRequest);
+        final ApplicationUser result = userService.save(signUpRequest);
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentContextPath().path("/api/users/{username}")
                 .buildAndExpand(result.getUsername()).toUri();
 
-        return ResponseEntity.created(location).body(new ApiResponse(true, "User registered successfully"));
+        return ResponseEntity.created(location).body(new ApiResponse(true, "ApplicationUser registered successfully"));
     }
 }

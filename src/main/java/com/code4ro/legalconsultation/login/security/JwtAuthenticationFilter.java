@@ -23,6 +23,11 @@ import java.util.UUID;
  */
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+    private static final String AUTH_HEADER = "Authorization";
+    private static final String BEARER = "Bearer ";
+    private static final Integer TOKEN_SUBSTR = 7;
+
+
     @Autowired
     private JwtTokenProvider tokenProvider;
 
@@ -55,9 +60,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private String getJwtFromRequest(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7);
+        String bearerToken = request.getHeader(AUTH_HEADER);
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER)) {
+            return bearerToken.substring(TOKEN_SUBSTR);
         }
         return null;
     }

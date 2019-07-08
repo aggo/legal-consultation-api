@@ -1,6 +1,6 @@
 package com.code4ro.legalconsultation.login.security;
 
-import com.code4ro.legalconsultation.login.model.User;
+import com.code4ro.legalconsultation.login.model.ApplicationUser;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,14 +32,14 @@ public class UserPrincipal implements UserDetails {
         this.password = password;
     }
 
-    public static UserPrincipal create(User user) {
+    public static UserPrincipal create(ApplicationUser applicationUser) {
 
         return new UserPrincipal(
-                user.getId(),
-                user.getName(),
-                user.getUsername(),
-                user.getEmail(),
-                user.getPassword()
+                applicationUser.getId(),
+                applicationUser.getName(),
+                applicationUser.getUsername(),
+                applicationUser.getEmail(),
+                applicationUser.getPassword()
         );
     }
 

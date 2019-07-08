@@ -9,25 +9,20 @@ import javax.validation.constraints.Size;
 import java.util.UUID;
 
 @Entity
-@Table(name = "users", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {
-                "username"
-        }),
-        @UniqueConstraint(columnNames = {
-                "email"
-        })
-})
-public class User {
+@Table(name = "users")
+public class ApplicationUser {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
     @NotBlank
     @Size(max = 40)
+    @Column(unique = true)
     private String name;
 
     @NotBlank
     @Size(max = 15)
+    @Column(unique = true)
     private String username;
 
     @NaturalId
@@ -40,11 +35,11 @@ public class User {
     @Size(max = 100)
     private String password;
 
-    public User() {
+    public ApplicationUser() {
 
     }
 
-    public User(String name, String username, String email, String password) {
+    public ApplicationUser(String name, String username, String email, String password) {
         this.name = name;
         this.username = username;
         this.email = email;
