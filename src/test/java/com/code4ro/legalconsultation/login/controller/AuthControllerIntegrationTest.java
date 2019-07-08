@@ -17,8 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -52,7 +51,8 @@ public class AuthControllerIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json)
                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(content().json("{'message':'Duplicate username!'}"))
+                .andExpect(jsonPath("$.i18nErrors[0].i18nErrorKey")
+                        .value("validation.user.Duplicate.username"))
                 .andExpect(status().isConflict());
 
         // fail to register with same email
@@ -62,7 +62,8 @@ public class AuthControllerIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json)
                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(content().json("{'message':'Duplicate email!'}"))
+                .andExpect(jsonPath("$.i18nErrors[0].i18nErrorKey")
+                        .value("validation.user.Duplicate.email"))
                 .andExpect(status().isConflict());
     }
 
@@ -96,6 +97,8 @@ public class AuthControllerIntegrationTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json)
                 .accept(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.i18nErrors[0].i18nErrorKey")
+                        .value("login.user.Bad.credentials"))
                 .andExpect(status().isUnauthorized());
     }
 }

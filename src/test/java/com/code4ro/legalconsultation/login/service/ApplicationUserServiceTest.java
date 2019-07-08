@@ -1,6 +1,6 @@
 package com.code4ro.legalconsultation.login.service;
 
-import com.code4ro.legalconsultation.login.exception.ValidationException;
+import com.code4ro.legalconsultation.common.controller.LegalValidationException;
 import com.code4ro.legalconsultation.login.model.ApplicationUser;
 import com.code4ro.legalconsultation.login.payload.SignUpRequest;
 import com.code4ro.legalconsultation.login.repository.UserRepository;
@@ -35,14 +35,14 @@ public class ApplicationUserServiceTest {
         verify(userRepository).save(any(ApplicationUser.class));
     }
 
-    @Test(expected = ValidationException.class)
+    @Test(expected = LegalValidationException.class)
     public void saveDuplicateUser() {
         when(userRepository.existsByUsername(signUpRequest.getUsername())).thenReturn(true);
 
         userService.save(signUpRequest);
     }
 
-    @Test(expected = ValidationException.class)
+    @Test(expected = LegalValidationException.class)
     public void saveDuplicateEmail() {
         when(userRepository.existsByEmail(signUpRequest.getEmail())).thenReturn(true);
 
