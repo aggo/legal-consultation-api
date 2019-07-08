@@ -1,19 +1,18 @@
 package com.code4ro.legalconsultation.login.model;
 
+import com.code4ro.legalconsultation.models.BaseEntity;
 import org.hibernate.annotations.NaturalId;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.UUID;
 
 @Entity
 @Table(name = "users")
-public class ApplicationUser {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+public class ApplicationUser extends BaseEntity {
 
     @NotBlank
     @Size(max = 40)
@@ -44,14 +43,6 @@ public class ApplicationUser {
         this.username = username;
         this.email = email;
         this.password = password;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
     }
 
     public String getUsername() {
